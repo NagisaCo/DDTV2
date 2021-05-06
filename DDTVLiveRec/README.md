@@ -5,6 +5,7 @@
 ***
 (代码中大量 **中文** 变量\函数 **易#** 警告，美术生出身，请各位大佬轻拍 
 ***
+<br/>
 
 # 功能完成情况
 * 支持linux，可以挂在路由器或树莓派等linux嵌入式设备上运行
@@ -16,7 +17,8 @@
 * 登陆买票后可以录制付费直播内容
 * 在录制的同时储存弹幕信息为ass文件
   
-有任何问题和需要增加的功能欢迎加群：307156949直接说
+有任何问题和需要增加的功能欢迎加群：307156949直接说  
+<br/>
 
 # 使用说明
     
@@ -43,9 +45,9 @@ web服务端:
 [http://IP:11419/log]：DDTVLiveRec日志信息  
 [http://IP:11419/file]：DDTVLiveRec录制的文件列表  
 [http://IP:11419/list]：DDTVLiveRec下载列表状态查看  
+<br/>
 
-
-### 如果使用Docker构建:
+# 如果使用Docker构建:
 
 1. 构建Docker镜像：
 
@@ -66,6 +68,7 @@ docker run -d \
     --name ddtv \
     ddtv:latest
 ```
+<br/>
 
 # 录制配置：RoomListConfig.json说明：
 格式和解析方式和DDTV一样，格式为json字符串，releases发布的压缩包里附带了一个参考的文件。  
@@ -97,6 +100,27 @@ docker run -d \
 使用DDTVLiveRec需要注意的为["Name"]["OfficialName"]["RoomNumber"]["VideoStatus"]  
 
 ### 一定要确保符合参考文件的JSON文件格式！！！
+<br/>
+
+# 启用自动转码
+在**DDTVLiveRec.dll.config**文件中，将[AutoTranscoding]的值改为1，也就是
+```ini
+<add key="AutoTranscoding" value="1" />
+```   
+（注:如果没有DDTVLiveRec.dll.config文件，请先运行一次DDTVLiveRec，会自动生成该文件）  
+<br/>
+请注意！自动转码会**消耗大量CPU资源**，CPU资源不够可能会**导致不断重连、断播、网络连接失败等故障！！**  
+请注意！自动转码会**消耗大量CPU资源**，CPU资源不够可能会**导致不断重连、断播、网络连接失败等故障！！**  
+请注意！自动转码会**消耗大量CPU资源**，CPU资源不够可能会**导致不断重连、断播、网络连接失败等故障！！**  
+
+
+## windows加载ffmpeg
+>在根目录中建立**libffmpeg**文件夹，将DDTV本地中对应的[ffmpeg.exe]文件给复制到该目录  
+(也就是和DDTVLiveRec执行文件的相对路径为：[./libffmpeg/ffmpeg.exe])
+## Linux\MacOS加载ffmpeg
+>根据自己的系统安装ffmpeg，并将ffmpeg加入系统环境变量中  
+
+<br/>
 
 # 运行界面
 主界面   
@@ -111,8 +135,49 @@ WEB下载状况查看界面
 WEB文件列表界面   
 ![WEB文件列表界面](./软件图/下载文件信息列表.png)   
 
+<details>
 
+<summary><h1>DDTVLiveRec上传模块使用说明</h1></summary>
 
+## 0 基本设置  
+配置文件：DDTVLiveRec.dll.config  
+- DeleteAfterUpload  
+  上传后删除源文件：1删除 2保留  
+  只有当最后一个上传任务成功后 才会执行删除操作
+
+- Enablexxx  
+  开启xxx上传并设置顺序  
+  当为0时不上传至此目标，其他数字为上传的次序
+
+- xxxPath  
+  上传至xxx的目录，默认为$/$根目标  
+  该目录下会根据直播间进行分类，每个文件夹下根据直播时间再分类
+## 1 OneDrive
+1. 软件安装 安装OneDriveUploader  
+https://github.com/MoeClub/OneList/tree/master/OneDriveUploader
+
+    - Windows用户下载i386(32位)/amd64(64位)中的可执行文件到DDTVLiveRec.exe的同级目录下  
+    - Linux用户
+        ```sh
+        wget https://raw.githubusercontent.com/MoeClub/OneList/master/OneDriveUploader/amd64/linux/OneDriveUploader -P /usr/local/bin/
+        chmod +x /usr/local/bin/OneDriveUploader
+        ```
+2. 配置  
+   根据github上的说明，先初始化配置文件  
+   再在DDTVLiveRec.dll.config 中将生成的auth.json位置填入$OneDriveConfig$  
+
+## 2 腾讯Cos对象存储
+1. 申请腾讯云API
+2. 配置文件中填写相关信息  
+   - CosSecretId API中的ID
+   - CosSecretKey API中的Key
+   - CosRegion 存储桶所在区域，格式为 xx-xxxx
+   - CosBucket 存储桶名称，格式为 bucketname-appid
+
+没有你的上传目标？试试自己添加吧！
+[相关文档](./Upload.md)
+
+</details><br>
 
 ## 写给不会使用gayhub的：怎么下载？？？怎么下载？？？怎么下载？？？
 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓点击跳转下载页面↓↓↓↓↓↓↓↓↓↓↓↓↓↓  
@@ -120,6 +185,7 @@ WEB文件列表界面
 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑点击跳转下载页面↑↑↑↑↑↑↑↑↑↑↑↑↑↑   
 ===如果实在是下载不动也可以加群在群共享中下载,群：307156949===
 
+<br/>
 
 # 关于监控列表
 兼容DDTVLiveRec，DDTV1.0，DDTV2.0通用。    
@@ -127,6 +193,7 @@ WEB文件列表界面
 ### 在更新软件的时候请备份好RoomListConfig.json文件，该文件是监控房间配置文件
 ### 在更新软件的时候请备份好RoomListConfig.json文件，该文件是监控房间配置文件
 ### 在更新软件的时候请备份好RoomListConfig.json文件，该文件是监控房间配置文件
+<br/>
 
 
 # 使用到的第三方组件
