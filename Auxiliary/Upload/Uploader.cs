@@ -26,6 +26,14 @@ namespace Auxiliary.Upload
         public static string cosBucket { set; get; } = "";
         public static string cosPath = "";
 
+        //BaiduPan
+        public static string enableBaiduPan { set; get; } = "";
+        public static string baiduPanPath = "";
+
+        //AliPan
+        public static string enableAliPan { set; get; } = "";
+        public static string aliPanPath = "";
+
         public static Dictionary<int, string> UploadOrderTemp { set; get; } = new Dictionary<int, string>(); //未排序上传顺序
         public static Dictionary<int, string> UploadOrder { set; get; } //上传顺序
 
@@ -60,6 +68,8 @@ namespace Auxiliary.Upload
 
                     InitOneDrive();
                     InitCos();
+                    InitBaiduPan();
+                    InitAliPan();
 
                     enableUpload &= CheckEnableUpload; //配置文件中EnableUpload开启 且 至少成功配置一个上传目标
                     UploadOrder = UploadOrderTemp.OrderBy(p => p.Key).ToDictionary(p => p.Key, o => o.Value);
@@ -88,10 +98,10 @@ namespace Auxiliary.Upload
                 InfoLog.InfoPrintf($"已检测到OneDrive上传任务，上传顺序为{enableOneDrive}", InfoLog.InfoClass.上传必要提示);
 
                 oneDriveConfig = MMPU.读取exe默认配置文件("OneDriveConfig", "");
-                InfoLog.InfoPrintf($"配置文件初始化任务[oneDriveConfig]:{oneDriveConfig}", InfoLog.InfoClass.Debug);
+                InfoLog.InfoPrintf($"配置文件初始化任务[OneDriveConfig]:{oneDriveConfig}", InfoLog.InfoClass.Debug);
                 oneDrivePath = MMPU.读取exe默认配置文件("OneDrivePath", "/");
                 MMPU.CheckPath(ref oneDrivePath);
-                InfoLog.InfoPrintf($"配置文件初始化任务[oneDrivePath]:{oneDrivePath}", InfoLog.InfoClass.Debug);
+                InfoLog.InfoPrintf($"配置文件初始化任务[OneDrivePath]:{oneDrivePath}", InfoLog.InfoClass.Debug);
             }
         }
 
@@ -123,6 +133,44 @@ namespace Auxiliary.Upload
                 cosPath = MMPU.读取exe默认配置文件("CosPath", "/");
                 MMPU.CheckPath(ref cosPath);
                 InfoLog.InfoPrintf($"配置文件初始化任务[CosPath]:{cosPath}", InfoLog.InfoClass.Debug);
+            }
+        }
+
+        /// <summary>
+        /// 初始化BaiduPan
+        /// </summary>
+        private static void InitBaiduPan()
+        {
+            enableBaiduPan = MMPU.读取exe默认配置文件("EnableBaiduPan", "0");
+            InfoLog.InfoPrintf($"配置文件初始化任务[EnableBaiduPan]:{enableBaiduPan}", InfoLog.InfoClass.Debug);
+            if (enableBaiduPan != "0")
+            {
+                UploadOrderTemp.Add(int.Parse(enableBaiduPan), "BaiduPan");
+                CheckEnableUpload = true;
+                InfoLog.InfoPrintf($"已检测到BaiduPan上传任务，上传顺序为{enableBaiduPan}", InfoLog.InfoClass.上传必要提示);
+
+                baiduPanPath = MMPU.读取exe默认配置文件("BaiduPanPath", "/");
+                MMPU.CheckPath(ref baiduPanPath);
+                InfoLog.InfoPrintf($"配置文件初始化任务[BaiduPanPath]:{baiduPanPath}", InfoLog.InfoClass.Debug);
+            }
+        }
+
+        /// <summary>
+        /// 初始化AliPan
+        /// </summary>
+        private static void InitAliPan()
+        {
+            enableAliPan = MMPU.读取exe默认配置文件("EnableAliPan", "0");
+            InfoLog.InfoPrintf($"配置文件初始化任务[EnableAliPan]:{enableAliPan}", InfoLog.InfoClass.Debug);
+            if (enableAliPan != "0")
+            {
+                UploadOrderTemp.Add(int.Parse(enableAliPan), "AliPan");
+                CheckEnableUpload = true;
+                InfoLog.InfoPrintf($"已检测到AliPan上传任务，上传顺序为{enableAliPan}", InfoLog.InfoClass.上传必要提示);
+
+                aliPanPath = MMPU.读取exe默认配置文件("AliPanPath", "/");
+                MMPU.CheckPath(ref aliPanPath);
+                InfoLog.InfoPrintf($"配置文件初始化任务[AliPanPath]:{aliPanPath}", InfoLog.InfoClass.Debug);
             }
         }
     }

@@ -62,6 +62,12 @@ namespace Auxiliary.Upload
                             case "Cos":
                                 Upload(new CosUpload().doUpload);
                                 break;
+                            case "BaiduPan":
+                                Upload(new BaiduPanUpload().doUpload);
+                                break;
+                            case "AliPan":
+                                Upload(new AliPanUpload().doUpload);
+                                break;
                             default:
                                 break;
                         }
